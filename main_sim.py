@@ -32,7 +32,7 @@ sys.path.insert(0, str(pathlib.Path(__file__).parent.resolve()))
 
 import utils
 from utils import extract_features_pca
-from models import dino_vits, moco_vits
+# from models import dino_vits, moco_vits
 from data.wikiart import WikiArtD
 
 
@@ -211,7 +211,7 @@ def main_worker(gpu, ngpus_per_node, args):
         if has_batchnorms(model):
             model = nn.SyncBatchNorm.convert_sync_batchnorm(model)
 
-        checkpoint = torch.load(args.model_path, map_location="cpu")
+        checkpoint = torch.load(args.model_path, map_location="cpu", weights_only=False)
         state_dict = convert_state_dict(checkpoint['model_state_dict'])
         msg = model.load_state_dict(state_dict, strict=False)
         print(f"=> loaded checkpoint with msg {msg}")
